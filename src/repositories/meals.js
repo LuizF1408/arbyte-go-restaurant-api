@@ -10,12 +10,21 @@ const getAll = async () => {
   return meals.map((meal) => new Meal(meal));
 };
 
+const getById = async (id) => {
+  const [meal] = await knex(tableName).where({ id });
+  return new Meal(meal);
+};
+
 const create = async (meal) => {
   const [created] = await knex(tableName).insert(meal).returning("*");
   return new Meal(created);
 };
 
+const del = (id) => knex(tableName).where({ id }).del();
+
 module.exports = {
   getAll,
+  getById,
   create,
+  del,
 };

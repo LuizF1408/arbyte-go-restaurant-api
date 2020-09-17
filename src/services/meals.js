@@ -15,7 +15,16 @@ const create = async (userId, mealData) => {
   return repository.create(meal);
 };
 
+const del = async (userId, id) => {
+  const meal = await repository.getById(id);
+  if (!meal.id) {
+    throw { status: 404, message: "Not Found" };
+  }
+  return repository.del(id);
+};
+
 module.exports = {
   getAll,
   create,
+  del,
 };

@@ -23,7 +23,17 @@ const create = async (req, res) => {
   }
 };
 
+const del = async (req, res) => {
+  try {
+    await service.del(req.user.id, req.params.id);
+    res.status(204).end();
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
 module.exports = {
   getAll,
   create,
+  del,
 };
