@@ -23,6 +23,15 @@ const create = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+  try {
+    const updated = await service.update(req.user.id, req.params.id, req.body);
+    res.status(200).json(updated);
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
 const del = async (req, res) => {
   try {
     await service.del(req.user.id, req.params.id);
@@ -35,5 +44,6 @@ const del = async (req, res) => {
 module.exports = {
   getAll,
   create,
+  update,
   del,
 };

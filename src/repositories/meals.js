@@ -20,11 +20,20 @@ const create = async (meal) => {
   return new Meal(created);
 };
 
+const update = async (id, meal) => {
+  const [updated] = await knex(tableName)
+    .where({ id })
+    .update(meal)
+    .returning("*");
+  return new Meal(updated);
+};
+
 const del = (id) => knex(tableName).where({ id }).del();
 
 module.exports = {
   getAll,
   getById,
   create,
+  update,
   del,
 };
