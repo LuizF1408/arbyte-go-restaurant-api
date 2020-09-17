@@ -4,7 +4,7 @@ function User({
   id,
   name,
   price,
-  available,
+  available = true,
   image_url,
   created_by,
   description,

@@ -10,6 +10,20 @@ const getAll = async (req, res) => {
   }
 };
 
+const create = async (req, res) => {
+  try {
+    const { price, name, image_url, description } = req.body;
+    if (!price || !name || !image_url || !description) {
+      throw { status: 400, message: "Invalid Data" };
+    }
+    const created = await service.create(req.user.id, req.body);
+    res.status(201).json(created);
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
 module.exports = {
   getAll,
+  create,
 };
