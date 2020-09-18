@@ -10,6 +10,15 @@ const getOne = async (filter) => {
   return new User(user);
 };
 
+const update = async (id, user) => {
+  const [updated] = await knex(tableName)
+    .where({ id })
+    .update(user)
+    .returning("*");
+  return new User(updated);
+};
+
 module.exports = {
   getOne,
+  update,
 };

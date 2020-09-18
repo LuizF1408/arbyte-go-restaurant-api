@@ -4,8 +4,8 @@ const generateSalt = (size = 16) => {
   return crypto.randomBytes(size).toString("hex");
 };
 
-const generatePassword = () => {
-  return generateSalt(6);
+const generatePassword = (size = 6) => {
+  return generateSalt(size);
 };
 
 const encryptPassword = (password, salt = generateSalt()) => {

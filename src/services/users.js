@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { encryptPassword } = require("./utils/encrypt");
+const { encryptPassword, generatePassword } = require("./utils/encrypt");
 const repository = require("../repositories/users");
 const { createToken } = require("./utils/jwt");
 
@@ -27,7 +27,23 @@ const getById = async (id) => {
   return user;
 };
 
+const forgotPassword = async ({ cpf }) => {
+  const { id, salt } = await repository.getOne({ cpf });
+  if (!id) {
+    return;
+  }
+  const newPassword = generatePassword();
+
+  const { encryptedPassword: password } = encryptPassword(newPassword, salt);
+  await repository.update(id, {
+    password,
+    updated_at: new Date().toUTCString(),
+  });
+  //TODO send email with the new password
+};
+
 module.exports = {
   login,
   getById,
+  forgotPassword,
 };
