@@ -2,6 +2,7 @@ const User = require("../models/User");
 const { encryptPassword, generatePassword } = require("./utils/encrypt");
 const repository = require("../repositories/users");
 const { createToken } = require("./utils/jwt");
+const encrypt = require("./utils/encrypt");
 
 const login = async (loginData) => {
   const user = await repository.getOne({ cpf: loginData.cpf });
@@ -42,8 +43,28 @@ const forgotPassword = async ({ cpf }) => {
   //TODO send email with the new password
 };
 
+const changePassword = async (id, { password, newPassword }) => {
+  const user = await repository.getOne({ id });
+  if (!user.id) {
+    throw { status: 404, message: "Not found" };
+  }
+  const { encryptedPassword } = encryptPassword(password, user.salt);
+  if (encryptedPassword !== user.password) {
+    throw { status: 409, message: "Current password no matching" };
+  }
+  const { encryptedPassword: newPasswordEncrypted } = encryptPassword(
+    newPassword,
+    user.salt
+  );
+  return repository.update(id, {
+    password: newPasswordEncrypted,
+    updated_at: new Date().toUTCString(),
+  });
+};
+
 module.exports = {
   login,
   getById,
   forgotPassword,
+  changePassword,
 };
