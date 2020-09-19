@@ -1,5 +1,6 @@
 const knex = require("../../database");
 const User = require("../models/User");
+const { sendEMail: sendMail } = require("./utils/mail");
 const tableName = "users";
 
 /*
@@ -18,7 +19,10 @@ const update = async (id, user) => {
   return new User(updated);
 };
 
+const sendEMail = async (msg) => sendMail(msg);
+
 module.exports = {
   getOne,
   update,
+  sendEMail,
 };
