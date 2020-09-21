@@ -29,18 +29,26 @@ const getById = async (id) => {
 };
 
 const forgotPassword = async ({ cpf }) => {
-  const { id, salt } = await repository.getOne({ cpf });
+  const { id, salt, email } = await repository.getOne({ cpf });
   if (!id) {
     return;
   }
-  const newPassword = generatePassword();
+  const newPassword = generatePassword(3);
 
   const { encryptedPassword: password } = encryptPassword(newPassword, salt);
   await repository.update(id, {
     password,
     updated_at: new Date().toUTCString(),
   });
-  //TODO send email with the new password
+
+  const msg = {
+    to: email,
+    subject: process.env.NEW_PASSWORD_SUBJECT,
+    text: `Here is your new Password ${newPassword}`,
+    html: `<strong>Here is your new Password ${newPassword}</strong>`,
+  };
+
+  return repository.sendEMail(msg);
 };
 
 const changePassword = async (id, { password, newPassword }) => {
