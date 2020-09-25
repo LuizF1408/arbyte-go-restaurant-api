@@ -1,15 +1,18 @@
-const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const mailgun = require("mailgun-js");
+const { MAILGUN_DOMAIN, MAILGUN_API_KEY } = process.env;
+const mg = mailgun({
+  apiKey: MAILGUN_API_KEY,
+  domain: MAILGUN_DOMAIN,
+});
 
 exports.sendEMail = async function sendEMail(msg) {
-  try {
-    const response = await sgMail.send({
+  mg.messages().send(
+    {
       from: process.env.SENDER_EMAIL,
       ...msg,
-    });
-
-    console.log("SG", response);
-  } catch (error) {
-    console.log("SG", error);
-  }
+    },
+    function (error, body) {
+      console.log(body);
+    }
+  );
 };
