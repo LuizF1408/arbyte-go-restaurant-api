@@ -45,7 +45,7 @@ const forgotPassword = async ({ cpf }) => {
     to: email,
     subject: process.env.NEW_PASSWORD_SUBJECT,
     text: `Here is your new Password ${newPassword}`,
-    html: `<strong>Here is your new Password ${newPassword}</strong>`,
+    html: `Here is your new Password <strong>${newPassword}</strong>`,
   };
 
   return repository.sendEMail(msg);

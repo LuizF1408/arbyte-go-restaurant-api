@@ -15,7 +15,7 @@ exports.seed = function (knex) {
           cpf: "95909141287",
           salt,
           name: "Douglas Soares",
-          email: "thedouglas5107@gmail.com",
+          email: "sdouglas5107@gmail.com",
           password,
           created_at : now,
           updated_at : now
